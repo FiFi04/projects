@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cars.controller.MainPaneController">
+    <left>
+        <VBox maxHeight="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <children>
+                <ListView fx:id="optionsListView" editable="true" maxHeight="1.7976931348623157E308" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" VBox.vgrow="ALWAYS">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </ListView>
+            </children>
+        </VBox>
+    </left>
+   <center>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+             <fx:include fx:id="carsTablePane" source="carsTablePane.fxml" />
+         </children></VBox>
+   </center>
+</BorderPane>
