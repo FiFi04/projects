@@ -2,13 +2,12 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cars.controller.MainPaneController">
+<BorderPane fx:id="mainPane" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cars.controller.MainPaneController">
     <left>
-        <VBox maxHeight="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+        <VBox maxHeight="1.7976931348623157E308" prefHeight="250.0" prefWidth="100.0" BorderPane.alignment="CENTER">
             <children>
                 <ListView fx:id="optionsListView" editable="true" maxHeight="1.7976931348623157E308" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" VBox.vgrow="ALWAYS">
                     <VBox.margin>
@@ -19,9 +18,9 @@
         </VBox>
     </left>
    <center>
-      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="mainAreaVBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-             <fx:include fx:id="carsTablePane" source="carsTablePane.fxml" />
+             <fx:include fx:id="carsTablePane" source="carsTablePane.fxml" VBox.vgrow="ALWAYS" />
          </children></VBox>
    </center>
 </BorderPane>

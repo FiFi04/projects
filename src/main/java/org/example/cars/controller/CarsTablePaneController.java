@@ -1,17 +1,10 @@
 package org.example.cars.controller;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.example.cars.model.Car;
-import org.example.cars.service.CarService;
-
-import java.io.BufferedWriter;
-
-public class CarsTablePaneController {
+public class CarsTablePaneController implements PaneController{
     @FXML
     private TableView<Car> carsTable;
     @FXML
@@ -31,8 +24,6 @@ public class CarsTablePaneController {
     public void initialize() {
 
     }
-
-
 
     public TableView<Car> getCarsTable() {
         return carsTable;

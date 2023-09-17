@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cars.controller.CarAddPaneController">
+   <center>
+      <HBox prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox HBox.hgrow="ALWAYS">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="110.0" text="Marka" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField fx:id="brandTextField" minWidth="100.0" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+            <VBox HBox.hgrow="ALWAYS">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="110.0" text="Model" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField fx:id="modelTextField" minWidth="100.0" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </TextField>
+               </children>
+            </VBox>
+            <VBox HBox.hgrow="ALWAYS">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="110.0" text="Rok produkcji" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField fx:id="prodYearTextField" minWidth="100.0" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+            <VBox HBox.hgrow="ALWAYS">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="110.0" text="Data przeglądu" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <DatePicker fx:id="serviceDatePicker" minWidth="100.0" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+            <VBox HBox.hgrow="ALWAYS">
+               <children>
+                  <Label alignment="CENTER" minWidth="-Infinity" prefHeight="18.0" prefWidth="110.0" text="Data ubezpieczenia" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <DatePicker fx:id="insuranceDatePicker" minWidth="100.0" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+            <VBox HBox.hgrow="ALWAYS">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="110.0" text="Nr tablic rejestr." VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField fx:id="licencePlateTextField" minWidth="100.0" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </center>
+   <bottom>
+      <Button fx:id="addButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefWidth="610.0" text="Dodaj" BorderPane.alignment="CENTER" />
+   </bottom>
+</BorderPane>
