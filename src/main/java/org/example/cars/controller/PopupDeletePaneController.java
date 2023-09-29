@@ -1,19 +1,30 @@
 package org.example.cars.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
+public class PopupDeletePaneController {
+        @FXML
+        private Button cancelButton;
 
-public class PopupPaneController {
-    @FXML
-    private Button confirmationButton;
-    @FXML
-    private Label messageLabel;
+        @FXML
+        private Button confirmationButton;
 
-    public void initialize() {
+        @FXML
+        private Label messageLabel;
 
+
+        public void initialize() {
+
+        }
+
+    public Button getCancelButton() {
+        return cancelButton;
+    }
+
+    public void setCancelButton(Button cancelButton) {
+        this.cancelButton = cancelButton;
     }
 
     public Button getConfirmationButton() {
@@ -31,5 +42,6 @@ public class PopupPaneController {
     public void setMessageLabel(Label messageLabel) {
         this.messageLabel = messageLabel;
     }
-
 }
+
+

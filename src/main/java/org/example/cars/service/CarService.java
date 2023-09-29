@@ -15,16 +15,26 @@ public class CarService implements Service{
     public void add(Car car) {
         LocalDate maximumValidityPeriod = LocalDate.now().plusYears(1);
         loadPlaceLicenseNumbers();
-        if (maximumValidityPeriod.isBefore(car.getInsuranceDate())) {
-            final String dateExceptionMessage = "Ważność daty ubezpieczenia nie może być większa niż rok od dzisiejszej daty";
-            System.err.println(dateExceptionMessage);
-            throw new DateExceededException(dateExceptionMessage);
+        try {
+            if (maximumValidityPeriod.isBefore(car.getInsuranceDate())) {
+                final String dateExceptionMessage = "Ważność daty ubezpieczenia nie może być większa niż rok od dzisiejszej daty";
+                System.err.println(dateExceptionMessage);
+                throw new DateExceededException(dateExceptionMessage);
+            }
+        } catch (NullPointerException e) {
+            throw new RuntimeException("Pole z datą ubezpieczenia nie może być puste");
         }
-        if (maximumValidityPeriod.isBefore(car.getServiceDate())) {
-            final String dateExceptionMessage = "Ważność daty przeglądu nie może być większa niż rok od dzisiejszej daty";
-            System.err.println(dateExceptionMessage);
-            throw new DateExceededException(dateExceptionMessage);
+
+        try {
+            if (maximumValidityPeriod.isBefore(car.getServiceDate())) {
+                final String dateExceptionMessage = "Ważność daty przeglądu nie może być większa niż rok od dzisiejszej daty";
+                System.err.println(dateExceptionMessage);
+                throw new DateExceededException(dateExceptionMessage);
+            }
+        } catch (NullPointerException e) {
+            throw new RuntimeException("Pole z datą przeglądu nie może być puste");
         }
+
         if (isCarAlreadyExists(car)) {
             final String carExistsExceptionMessage = "Auto o podanych danych już istnieje w bazie danych";
             System.err.println(carExistsExceptionMessage);
@@ -35,7 +45,27 @@ public class CarService implements Service{
             System.err.println(incorrectLicenseExceptionMessage);
             throw new IncorrectLicenseNumberException(incorrectLicenseExceptionMessage);
         }
+        if (!areAllFieldsCompleted(car)) {
+            final String requiredInfoMessage = "Wszystkie pola są wymagane. Wprowadź poprawnie dane";
+            System.err.println(requiredInfoMessage);
+            throw new RuntimeException(requiredInfoMessage);
+        }
+        if (!isManufactureYearCorrect(car)) {
+            String message = "Rok produkcji nie może być późniejszy niz aktualny rok";
+            System.err.println(message);
+            throw new DateExceededException(message);
+        }
         carRepository.addCar(car);
+    }
+
+    private boolean isManufactureYearCorrect(Car car) {
+        return LocalDate.now().getYear() >= car.getManufactureYear();
+
+    }
+
+    private boolean areAllFieldsCompleted(Car car) {
+        return !(car.getBrand() == null || car.getBrand().matches("^\\s*$") || car.getModel() == null || car.getModel().matches("^\\s*$") ||
+                car.getManufactureYear() == 0 || car.getServiceDate() == null || car.getInsuranceDate() == null || car.getLicenseNumber() == null);
     }
 
     @Override
@@ -74,14 +104,14 @@ public class CarService implements Service{
 
     public List<Car> getCarsByBrand(String brand) {
         List<Car> carsByBrand = CarRepository.getCars().stream()
-                .filter(car -> car.getBrand().equalsIgnoreCase(brand))
+                .filter(car -> car.getBrand().toLowerCase().contains(brand))
                 .toList();
         return carsByBrand;
     }
 
     public List<Car> getCarsByModel(String model) {
         List<Car> carsByModel = CarRepository.getCars().stream()
-                .filter(car -> car.getModel().equalsIgnoreCase(model))
+                .filter(car -> car.getModel().toLowerCase().contains(model))
                 .toList();
         return carsByModel;
     }

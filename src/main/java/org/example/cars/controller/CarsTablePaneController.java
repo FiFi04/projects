@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.example.cars.model.Car;
-public class CarsTablePaneController implements PaneController{
+public class CarsTablePaneController {
     @FXML
     private TableView<Car> carsTable;
     @FXML

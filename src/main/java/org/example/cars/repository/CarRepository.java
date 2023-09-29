@@ -41,6 +41,7 @@ public class CarRepository {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(carsFile, true))) {
             writer.newLine();
             writer.write(car.getFileDescriptionFormat());
+            cars.add(car);
             System.out.println("Dane pojazdu dodano do bazy aut");
         } catch (IOException e) {
             System.err.println("Błąd zapisu danych");

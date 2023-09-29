@@ -21,6 +21,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.example.cars.controller.ControllerUtils.*;
+
 public class MainPaneController {
     @FXML
     private BorderPane mainPane;
@@ -32,19 +34,6 @@ public class MainPaneController {
     private CarsTablePaneController carsTablePaneController;
 
     private CarService carService = new CarService();
-    private final String INSURANCE_DATE_ENDING = "Auta z kończącym się ubezpieczeniem";
-    private final String INSURANCE_DATE_ENDING_BY_MONTH = "Auta z kończącym się ubezpieczeniem w miesiącu...";
-    private final String SERVICE_DATE_ENDING = "Auta z kończącym się przeglądem";
-    private final String SERVICE_DATE_ENDING_BY_MONTH = "Auta z kończącym się przeglądem w miesiącu...";
-    private final String CARS_BY_BRAND = "Znajdź auto według marki";
-    private final String CARS_BY_MODEL = "Znajdź auto według modelu";
-    private final String SORT_BY_BRAND = "Posortuj auta według marki";
-    private final String ADD_CAR = "Dodaj auto";
-    private final String DELETE_CAR = "Usuń auto";
-    private final String CARS_TABLE_PANE_PATH = "/carsApp/javaFx/carsTablePane.fxml";
-    private final String INPUT_PANE_PATH = "/carsApp/javaFx/inputPane.fxml";
-    private final String CAR_ADD_PANE_PATH = "/carsApp/javaFx/carAddPane.fxml";
-    private final String POPUP_PANE_PATH = "/carsApp/javaFx/PopupPane.fxml";
 
     private List<String> options = List.of(INSURANCE_DATE_ENDING, INSURANCE_DATE_ENDING_BY_MONTH, SERVICE_DATE_ENDING,
             SERVICE_DATE_ENDING_BY_MONTH, CARS_BY_BRAND, CARS_BY_MODEL, SORT_BY_BRAND, ADD_CAR, DELETE_CAR);
@@ -55,93 +44,112 @@ public class MainPaneController {
             mainAreaVBox.getChildren().clear();
             carsTablePaneController = (CarsTablePaneController) getController(CARS_TABLE_PANE_PATH);
             System.out.println(optionsListView.getSelectionModel().getSelectedItems().toString());
-            if (optionsListView.getSelectionModel().getSelectedItems().toString().equals("[" + INSURANCE_DATE_ENDING + "]")) {
+            if (isOptionChosen(INSURANCE_DATE_ENDING)) {
                 initializeTable(FXCollections.observableList(carService.getCarsWithInsuranceDateExpiring()));
             }
-            if (optionsListView.getSelectionModel().getSelectedItems().toString().equals("[" + INSURANCE_DATE_ENDING_BY_MONTH + "]")) {
-                InputPaneController controller = (InputPaneController) getController(INPUT_PANE_PATH);
-                controller.getConfirmationButton().addEventHandler(ActionEvent.ACTION, actionEvent -> {
-                    Integer month = Integer.parseInt(controller.getTextField().getText());
-                    initializeTable(FXCollections.observableList(carService.getCarsWithInsuranceDateExpiringByMonth(month)));
-                });
+            if (isOptionChosen(INSURANCE_DATE_ENDING_BY_MONTH)) {
+                MonthSelectPaneController controller = (MonthSelectPaneController) getController(MONTH_INPUT_PANE_PATH);
+                controller.getMonthsChoiceBox().setItems(FXCollections.observableArrayList(MONTHS));
+                findCarsByDateExpiring(controller, INSURANCE_DATE_ENDING_BY_MONTH);
             }
-            if (optionsListView.getSelectionModel().getSelectedItems().toString().equals("[" + SERVICE_DATE_ENDING + "]")) {
+            if (isOptionChosen(SERVICE_DATE_ENDING)) {
                 initializeTable(FXCollections.observableList(carService.getCarsWithServiceDateExpiring()));
             }
-            if (optionsListView.getSelectionModel().getSelectedItems().toString().equals("[" + SERVICE_DATE_ENDING_BY_MONTH + "]")) {
-                InputPaneController controller = (InputPaneController) getController(INPUT_PANE_PATH);
-                controller.getConfirmationButton().addEventHandler(ActionEvent.ACTION, actionEvent -> {
-                    Integer month = Integer.parseInt(controller.getTextField().getText());
-                    initializeTable(FXCollections.observableList(carService.getCarsWithServiceDateExpiringByMonth(month)));
-                });
+            if (isOptionChosen(SERVICE_DATE_ENDING_BY_MONTH)) {
+                MonthSelectPaneController controller = (MonthSelectPaneController) getController(MONTH_INPUT_PANE_PATH);
+                controller.getMonthsChoiceBox().setItems(FXCollections.observableArrayList(MONTHS));
+                findCarsByDateExpiring(controller, SERVICE_DATE_ENDING_BY_MONTH);
             }
-            if (optionsListView.getSelectionModel().getSelectedItems().toString().equals("[" + CARS_BY_BRAND + "]")) {
-                InputPaneController controller = (InputPaneController) getController(INPUT_PANE_PATH);
-                controller.getInfoLabel().setText("Marka");
-                controller.getConfirmationButton().addEventHandler(ActionEvent.ACTION, actionEvent -> {
-                    String brand = controller.getTextField().getText();
-                    initializeTable(FXCollections.observableList(carService.getCarsByBrand(brand)));
-                });
+            if (isOptionChosen(CARS_BY_BRAND)) {
+                InputPaneController inputPaneController = (InputPaneController) getController(INPUT_PANE_PATH);
+                inputPaneController.getInfoLabel().setText("Marka");
+                findCarsByBrandModel(inputPaneController, CARS_BY_BRAND);
             }
-            if (optionsListView.getSelectionModel().getSelectedItems().toString().equals("[" + CARS_BY_MODEL + "]")) {
-                InputPaneController controller = (InputPaneController) getController(INPUT_PANE_PATH);
-                controller.getInfoLabel().setText("Model");
-                controller.getConfirmationButton().addEventHandler(ActionEvent.ACTION, actionEvent -> {
-                    String model = controller.getTextField().getText();
-                    initializeTable(FXCollections.observableList(carService.getCarsByModel(model)));
-                });
+            if (isOptionChosen(CARS_BY_MODEL)) {
+                InputPaneController inputPaneController = (InputPaneController) getController(INPUT_PANE_PATH);
+                inputPaneController.getInfoLabel().setText("Model");
+                findCarsByBrandModel(inputPaneController, CARS_BY_MODEL);
             }
-            if (optionsListView.getSelectionModel().getSelectedItems().toString().equals("[" + SORT_BY_BRAND + "]")) {
+            if (isOptionChosen(SORT_BY_BRAND)) {
                 initializeTable(FXCollections.observableList(carService.getCarsSortedByBrandName()));
             }
-            if (optionsListView.getSelectionModel().getSelectedItems().toString().equals("[" + ADD_CAR + "]")) {
+            if (isOptionChosen(ADD_CAR)) {
                 CarAddPaneController controller = (CarAddPaneController) getController(CAR_ADD_PANE_PATH);
                 initializeTable(FXCollections.observableList(carService.getCarsSortedByBrandName()));
-                controller.getAddButton().addEventHandler(ActionEvent.ACTION, actionEvent -> {
-                    Car car = createCar(controller);
-                    try {
-                        carService.add(car);
-                        showPopupWindow("Auto zostało dodane do listy");
-                    } catch (Exception e) {
-                        showPopupWindow(e.getMessage());
-                    }
-                });
+                addCarToDatabase(controller);
             }
-            if (optionsListView.getSelectionModel().getSelectedItems().toString().equals("[" + DELETE_CAR + "]")) {
+            if (isOptionChosen(DELETE_CAR)) {
                 InputPaneController inputPaneController = (InputPaneController) getController(INPUT_PANE_PATH);
                 initializeTable(FXCollections.observableList(carService.getCarsSortedByBrandName()));
                 inputPaneController.getConfirmationButton().setText("Usuń");
                 inputPaneController.getInfoLabel().setText("Wprowadź nr rejestracyjny lub wybierz auto z listy:");
-                List<Car> cars = new ArrayList<>();
-                carsTablePaneController.getCarsTable().addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEventCarTable ->
-                    cars.add(carsTablePaneController.getCarsTable().getSelectionModel().getSelectedItems().get(0))
-                );
-                inputPaneController.getConfirmationButton().addEventHandler(ActionEvent.ACTION, actionEvent ->
-                        System.out.println(deleteCar(inputPaneController, cars))
-                );
+                deleteCarFromDatabase(inputPaneController);
             }
         });
     }
 
-    private Car createCar (CarAddPaneController controller) {
+    private void deleteCarFromDatabase(InputPaneController inputPaneController) {
+        List<Car> cars = new ArrayList<>();
+        carsTablePaneController.getCarsTable().addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEventCarTable ->
+                cars.add(carsTablePaneController.getCarsTable().getSelectionModel().getSelectedItems().get(0))
+        );
+        inputPaneController.getConfirmationButton().addEventHandler(ActionEvent.ACTION, actionEvent ->
+                System.out.println(deleteCar(inputPaneController, cars))
+        );
+    }
+
+    private void addCarToDatabase(CarAddPaneController controller) {
+        controller.getAddButton().addEventHandler(ActionEvent.ACTION, actionEvent -> {
+            Car car = createCar(controller);
+            try {
+                carService.add(car);
+                showPopupWindow("Auto zostało dodane do listy");
+            } catch (Exception e) {
+                showPopupWindow(e.getMessage());
+            }
+        });
+    }
+
+    private void findCarsByDateExpiring(MonthSelectPaneController controller, String option) {
+        controller.getConfirmationButton().addEventHandler(ActionEvent.ACTION, actionEvent -> {
+            Integer month = controller.getMonthsChoiceBox().getValue();
+            List<Car> cars = option.equals(INSURANCE_DATE_ENDING_BY_MONTH) ? carService.getCarsWithInsuranceDateExpiringByMonth(month) :
+                    carService.getCarsWithServiceDateExpiringByMonth(month);
+            initializeTable(FXCollections.observableList(cars));
+        });
+    }
+
+    private void findCarsByBrandModel(InputPaneController controller, String option) {
+        controller.getConfirmationButton().addEventHandler(ActionEvent.ACTION, actionEvent -> {
+            String textField = controller.getTextField().getText();
+            List<Car> cars = option.equals(CARS_BY_BRAND) ? carService.getCarsByBrand(textField) : carService.getCarsByModel(textField);
+            initializeTable(FXCollections.observableList(cars));
+        });
+    }
+
+    private boolean isOptionChosen(String option) {
+        return optionsListView.getSelectionModel().getSelectedItems().toString().equals("[" + option + "]");
+    }
+
+    private Car createCar(CarAddPaneController controller) {
         String brand = controller.getBrandTextField().getText();
         String model = controller.getModelTextField().getText();
         Integer manufactureYear = Integer.parseInt(controller.getProdYearTextField().getText());
         LocalDate serviceDate = controller.getServiceDatePicker().getValue();
         LocalDate insuranceDate = controller.getInsuranceDatePicker().getValue();
-        String licencePlate = controller.getLicencePlateTextField().getText();
+        String licencePlate = controller.getLicencePlateTextField().getText().toUpperCase();
         return new Car(brand, model, manufactureYear, serviceDate, insuranceDate, licencePlate);
     }
 
     private boolean deleteCar(InputPaneController inputPaneController, List<Car> cars) {
-        if(inputPaneController.getTextField().getText().isEmpty()) {
-            carService.delete(cars.get(cars.size()-1));
+        if (inputPaneController.getTextField().getText().isEmpty()) {
+            showPopupDeleteWindow(cars.get(cars.size() - 1));
             return true;
         } else {
             String carLicense = inputPaneController.getTextField().getText();
             for (Car car : carService.getCarsSortedByBrandName()) {
-                if (car.getLicenseNumber().equals(carLicense)) {
-                    carService.delete(car);
+                if (car.getLicenseNumber().equalsIgnoreCase(carLicense)) {
+                    showPopupDeleteWindow(car);
                     return true;
                 }
             }
@@ -171,8 +179,35 @@ public class MainPaneController {
         );
     }
 
-    private PaneController getController(String path) {
-        PaneController controller;
+    private void showPopupDeleteWindow(Car car) {
+        Stage stage = new Stage();
+        VBox root = null;
+        PopupDeletePaneController controller;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(POPUP_DELETE_PANE_PATH));
+            root = loader.load();
+            controller = loader.getController();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("INFO");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
+        controller.getConfirmationButton().addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+                    carService.delete(car);
+                    stage.close();
+                }
+        );
+        controller.getCancelButton().addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent ->
+                    stage.close()
+        );
+    }
+
+
+    private Object getController(String path) {
+        Object controller;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
             Parent root = loader.load();
@@ -183,6 +218,7 @@ public class MainPaneController {
         }
         return controller;
     }
+
     private void initializeTable(ObservableList<Car> carsData) {
         carsTablePaneController.getCarsTable().getItems().clear();
         carsTablePaneController.getCarsTable().getItems().addAll(carsData);
