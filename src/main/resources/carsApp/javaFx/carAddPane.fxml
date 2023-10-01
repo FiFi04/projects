@@ -13,7 +13,7 @@
    <center>
       <HBox prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox HBox.hgrow="ALWAYS">
+            <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
                <children>
                   <Label alignment="CENTER" prefHeight="18.0" prefWidth="110.0" text="Marka" VBox.vgrow="ALWAYS">
                      <VBox.margin>
@@ -23,7 +23,7 @@
                   <TextField fx:id="brandTextField" minWidth="100.0" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
-            <VBox HBox.hgrow="ALWAYS">
+            <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
                <children>
                   <Label alignment="CENTER" prefHeight="18.0" prefWidth="110.0" text="Model" VBox.vgrow="ALWAYS">
                      <VBox.margin>
@@ -37,7 +37,7 @@
                   </TextField>
                </children>
             </VBox>
-            <VBox HBox.hgrow="ALWAYS">
+            <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
                <children>
                   <Label alignment="CENTER" prefHeight="18.0" prefWidth="110.0" text="Rok produkcji" VBox.vgrow="ALWAYS">
                      <VBox.margin>
@@ -47,27 +47,27 @@
                   <TextField fx:id="prodYearTextField" minWidth="100.0" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
-            <VBox HBox.hgrow="ALWAYS">
+            <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
                <children>
                   <Label alignment="CENTER" prefHeight="18.0" prefWidth="110.0" text="Data przeglądu" VBox.vgrow="ALWAYS">
                      <VBox.margin>
                         <Insets top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <DatePicker fx:id="serviceDatePicker" minWidth="100.0" VBox.vgrow="ALWAYS" />
+                  <DatePicker fx:id="serviceDatePicker" maxWidth="1.7976931348623157E308" minWidth="100.0" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
-            <VBox HBox.hgrow="ALWAYS">
+            <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
                <children>
                   <Label alignment="CENTER" minWidth="-Infinity" prefHeight="18.0" prefWidth="110.0" text="Data ubezpieczenia" VBox.vgrow="ALWAYS">
                      <VBox.margin>
                         <Insets top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <DatePicker fx:id="insuranceDatePicker" minWidth="100.0" VBox.vgrow="ALWAYS" />
+                  <DatePicker fx:id="insuranceDatePicker" maxWidth="1.7976931348623157E308" minWidth="100.0" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
-            <VBox HBox.hgrow="ALWAYS">
+            <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
                <children>
                   <Label alignment="CENTER" prefHeight="18.0" prefWidth="110.0" text="Nr tablic rejestr." VBox.vgrow="ALWAYS">
                      <VBox.margin>

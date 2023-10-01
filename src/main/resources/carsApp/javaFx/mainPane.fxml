@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="mainPane" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cars.controller.MainPaneController">
+<BorderPane fx:id="mainPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cars.controller.MainPaneController">
     <left>
         <VBox maxHeight="1.7976931348623157E308" prefHeight="250.0" prefWidth="100.0" BorderPane.alignment="CENTER">
             <children>
@@ -18,9 +19,12 @@
         </VBox>
     </left>
    <center>
-      <VBox fx:id="mainAreaVBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="mainAreaVBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="TOP_LEFT">
          <children>
              <fx:include fx:id="carsTablePane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" source="carsTablePane.fxml" VBox.vgrow="ALWAYS" />
-         </children></VBox>
+         </children>
+         <cursor>
+            <Cursor fx:constant="DEFAULT" />
+         </cursor></VBox>
    </center>
 </BorderPane>

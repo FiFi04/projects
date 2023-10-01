@@ -13,6 +13,12 @@ public class CarRepository {
     private static File carsFile = new File(CARS_FILE_PATH).getAbsoluteFile();
     private static Set<String> PLATE_LICENSE_PL;
     private static List<Car> cars;
+    private static FileWriteThread fileWriteThread;
+
+    public CarRepository() {
+        fileWriteThread = new FileWriteThread(carsFile, cars);
+        fileWriteThread.start();
+    }
 
     static {
             cars = new ArrayList<>();
@@ -38,45 +44,13 @@ public class CarRepository {
         }
 
     public void addCar(Car car) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(carsFile, true))) {
-            writer.newLine();
-            writer.write(car.getFileDescriptionFormat());
             cars.add(car);
-            System.out.println("Dane pojazdu dodano do bazy aut");
-        } catch (IOException e) {
-            System.err.println("Błąd zapisu danych");
-            e.printStackTrace();
-        }
+            System.out.println("Dane pojazdu dodano do bazy aut. Wątek: " + Thread.currentThread().getId());
     }
 
     public void delete(Car car) {
-        final String CARS_TEMP_FILE_PATH = "src/main/resources/carsApp/autaTemp.txt";
-        File carsTempFile = new File(CARS_TEMP_FILE_PATH).getAbsoluteFile();
-        try (BufferedReader reader = new BufferedReader(new FileReader(carsFile));
-             BufferedWriter writer = new BufferedWriter(new FileWriter(carsTempFile))) {
-            while (reader.ready()) {
-                String line = reader.readLine();
-                if (line.equals(car.getFileDescriptionFormat())) {
-                    continue;
-                }
-                writer.write(line);
-                if (reader.ready()) {
-                    writer.newLine();
-                }
-            }
-        } catch (FileNotFoundException e) {
-            System.err.println("Nie znaleziono pliku o nazwie " + carsFile.getName());
-            e.printStackTrace();
-        } catch (IOException e) {
-            System.err.println("Błąd zapisu");
-            e.printStackTrace();
-        }
         cars.remove(car);
-        boolean isDeleted = carsFile.delete();
-        boolean isRenamed = carsTempFile.renameTo(new File("src/main/resources/carsApp/" + carsFile.getName()).getAbsoluteFile());
-        if (isDeleted && isRenamed) {
-            System.out.println("Pomyślnie usunięto dane auta: " + car);
-        }
+        System.out.println("Pomyślnie usunięto dane auta: " + car + "\n Wątek: " + Thread.currentThread().getId());
     }
 
     public static void readLicensePrefixFromFile() {
@@ -97,5 +71,9 @@ public class CarRepository {
 
     public static List<Car> getCars() {
         return cars;
+    }
+
+    public static FileWriteThread getFileWriteThread() {
+        return fileWriteThread;
     }
 }

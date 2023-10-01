@@ -5,10 +5,10 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 
-<HBox xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cars.controller.InputPaneController">
+<HBox alignment="CENTER" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cars.controller.InputPaneController">
    <children>
-      <Label fx:id="infoLabel" text="Miesiąc" HBox.hgrow="ALWAYS" />
+      <Label fx:id="infoLabel" alignment="CENTER" minWidth="70.0" text="Miesiąc" textAlignment="CENTER" HBox.hgrow="ALWAYS" />
       <TextField fx:id="monthTextField" HBox.hgrow="ALWAYS" />
-      <Button fx:id="confirmationButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Zatwierdź" />
+      <Button fx:id="confirmationButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefWidth="100.0" text="Zatwierdź" />
    </children>
 </HBox>

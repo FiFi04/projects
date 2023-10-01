@@ -41,8 +41,9 @@ public class MainPaneController {
     public void initialize() {
         optionsListView.setItems(FXCollections.observableArrayList(options));
         optionsListView.addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-            mainAreaVBox.getChildren().clear();
-            carsTablePaneController = (CarsTablePaneController) getController(CARS_TABLE_PANE_PATH);
+            if (mainAreaVBox.getChildren().size() > 1) {
+                mainAreaVBox.getChildren().remove(0);
+            }
             System.out.println(optionsListView.getSelectionModel().getSelectedItems().toString());
             if (isOptionChosen(INSURANCE_DATE_ENDING)) {
                 initializeTable(FXCollections.observableList(carService.getCarsWithInsuranceDateExpiring()));
@@ -143,14 +144,18 @@ public class MainPaneController {
 
     private boolean deleteCar(InputPaneController inputPaneController, List<Car> cars) {
         if (inputPaneController.getTextField().getText().isEmpty()) {
-            showPopupDeleteWindow(cars.get(cars.size() - 1));
-            return true;
+            if (shouldDeletePopupWindow(cars.get(cars.size() - 1))) {
+                carService.delete(cars.get(cars.size() - 1));
+                return true;
+            }
         } else {
             String carLicense = inputPaneController.getTextField().getText();
             for (Car car : carService.getCarsSortedByBrandName()) {
                 if (car.getLicenseNumber().equalsIgnoreCase(carLicense)) {
-                    showPopupDeleteWindow(car);
-                    return true;
+                    if (shouldDeletePopupWindow(car)) {
+                        carService.delete(car);
+                        return true;
+                    }
                 }
             }
         }
@@ -179,7 +184,7 @@ public class MainPaneController {
         );
     }
 
-    private void showPopupDeleteWindow(Car car) {
+    private boolean shouldDeletePopupWindow(Car car) {
         Stage stage = new Stage();
         VBox root = null;
         PopupDeletePaneController controller;
@@ -194,17 +199,19 @@ public class MainPaneController {
         stage.setScene(scene);
         stage.setTitle("INFO");
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.show();
         controller.getConfirmationButton().addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-                    carService.delete(car);
+                    controller.setDeleteStatus(true);
                     stage.close();
                 }
         );
-        controller.getCancelButton().addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent ->
-                    stage.close()
+        controller.getCancelButton().addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+                    controller.setDeleteStatus(false);
+                    stage.close();
+                }
         );
+        stage.showAndWait();
+        return controller.isDelete();
     }
-
 
     private Object getController(String path) {
         Object controller;
@@ -220,8 +227,7 @@ public class MainPaneController {
     }
 
     private void initializeTable(ObservableList<Car> carsData) {
-        carsTablePaneController.getCarsTable().getItems().clear();
-        carsTablePaneController.getCarsTable().getItems().addAll(carsData);
+        carsTablePaneController.getCarsTable().setItems(carsData);
         carsTablePaneController.getBrandColumn().setCellValueFactory(car -> new SimpleStringProperty(car.getValue().getBrand()));
         carsTablePaneController.getModelColumn().setCellValueFactory(car -> new SimpleStringProperty(car.getValue().getModel()));
         carsTablePaneController.getYearOfManufactureColumn().setCellValueFactory(car -> new SimpleStringProperty(String.valueOf(car.getValue().getManufactureYear())));

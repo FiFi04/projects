@@ -9,8 +9,9 @@ import org.example.cars.repository.CarRepository;
 import java.time.LocalDate;
 import java.util.*;
 
-public class CarService implements Service{
+public class CarService implements Service {
     private CarRepository carRepository = new CarRepository();
+
     @Override
     public void add(Car car) {
         LocalDate maximumValidityPeriod = LocalDate.now().plusYears(1);
@@ -70,7 +71,6 @@ public class CarService implements Service{
 
     @Override
     public void delete(Car car) {
-        System.out.println("Czy na pewno chesz usunąć auto: " + car.toString() + "\n Y/N");
         carRepository.delete(car);
     }
 
@@ -120,6 +120,10 @@ public class CarService implements Service{
         List<Car> carsToSort = new ArrayList<>(CarRepository.getCars());
         Collections.sort(carsToSort);
         return carsToSort;
+    }
+
+    public static void closeWriteThread() {
+        CarRepository.getFileWriteThread().interrupt();
     }
 
     private boolean isLicenseNumberCorrect(Car car) {

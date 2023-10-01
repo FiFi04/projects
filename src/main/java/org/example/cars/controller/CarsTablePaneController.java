@@ -22,7 +22,6 @@ public class CarsTablePaneController {
 
 
     public void initialize() {
-
     }
 
     public TableView<Car> getCarsTable() {
