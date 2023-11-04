@@ -122,8 +122,8 @@ public class CarService implements Service {
         return carsToSort;
     }
 
-    public static void closeWriteThread() {
-        CarRepository.getFileWriteThread().interrupt();
+    public void interruptWriteThread() {
+        carRepository.getFileWriteThread().interrupt();
     }
 
     private boolean isLicenseNumberCorrect(Car car) {

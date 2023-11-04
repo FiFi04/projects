@@ -89,6 +89,10 @@ public class MainPaneController {
         });
     }
 
+    public void interruptWriteThread() {
+        carService.interruptWriteThread();
+    }
+
     private void deleteCarFromDatabase(InputPaneController inputPaneController) {
         List<Car> cars = new ArrayList<>();
         carsTablePaneController.getCarsTable().addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEventCarTable ->

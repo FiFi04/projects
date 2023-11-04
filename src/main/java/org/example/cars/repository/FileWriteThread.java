@@ -1,60 +1,73 @@
 package org.example.cars.repository;
 
 import org.example.cars.model.Car;
-import org.example.cars.view.MainCarFx;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FileWriteThread extends Thread {
     private final String TABLE_HEADERS = "MARKA;MODEL;ROK;BADANIE;OC;NR_REJ";
-    private File carsFile;
+    private boolean changedCarList = false;
     private List<Car> cars;
-    private List<Car> lastSaveCars;
+    private List<Car> lastSavedCars;
+    private List<Car> addedCars = new ArrayList<>();
+    private List<Car> deletedCars = new ArrayList<>();
 
-    public FileWriteThread(File file, List<Car> cars) {
-        this.carsFile = file;
-        this.cars = cars;
+    public FileWriteThread() {
+        this.cars = CarRepository.getCars();
+        this.lastSavedCars = new ArrayList<>(CarRepository.getCars());
     }
 
     @Override
     public void run() {
-        while (MainCarFx.isProgramRunning) {
-            if (!CarRepository.getCars().equals(lastSaveCars)) {
-                try {
-                    Thread.sleep(60000);
-                } catch (InterruptedException e) {
-                    if (!CarRepository.getCars().equals((lastSaveCars))) {
-                        try (BufferedWriter writer = new BufferedWriter(new FileWriter(carsFile))) {
-                            writer.write(TABLE_HEADERS);
-                            writer.newLine();
-                            for (Car car : cars) {
-                                writer.write(car.getFileDescriptionFormat());
-                                writer.newLine();
-                            }
-                            System.out.println("Zapisano plik przed zakończemiem programu");
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        }
-                    }
-                }
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter(carsFile))) {
-                    writer.write(TABLE_HEADERS);
-                    writer.newLine();
-                    for (Car car : cars) {
-                        writer.write(car.getFileDescriptionFormat());
+        while (true) {
+            try {
+                Thread.sleep(60000);
+            } catch (InterruptedException e) {
+                System.out.println("Wątek został przerwany: ID wątku " + this.getId());
+                break;
+            } finally {
+                if (changedCarList) {
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(CarRepository.getCarsFile()))) {
+                        writer.write(TABLE_HEADERS);
                         writer.newLine();
+                        for (Car car : cars) {
+                            writer.write(car.getFileDescriptionFormat());
+                            writer.newLine();
+                        }
+                        lastSavedCars = List.copyOf(cars);
+                        System.out.println("Pomyślnie zaktualizowano listę aut w pliku. Wątek: " + this.getId());
+                        System.out.println("Dodane auta:" + addedCars);
+                        System.out.println("Usunięte auta:" + deletedCars);
+                        addedCars.clear();
+                        deletedCars.clear();
+                        changedCarList = false;
+                    } catch (FileNotFoundException e) {
+                        System.err.println("Nie znaleziono pliku o nazwie " + CarRepository.getCarsFile().getName());
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        System.err.println("Błąd zapisu");
+                        e.printStackTrace();
                     }
-                    System.out.println("Pomyślnie zaktualizowano listę aut w pliku. Wątek: " + this.getId());
-                } catch (FileNotFoundException e) {
-                    System.err.println("Nie znaleziono pliku o nazwie " + carsFile.getName());
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    System.err.println("Błąd zapisu");
-                    e.printStackTrace();
                 }
-                lastSaveCars = List.copyOf(CarRepository.getCars());
             }
         }
+    }
+
+    void addNewCar(Car car) {
+        addedCars.add(car);
+    }
+
+    void addDeletedCar(Car car) {
+        deletedCars.add(car);
+    }
+
+    public boolean isChangedCarList() {
+        return changedCarList;
+    }
+
+    public void setChangedCarList(boolean changedCarList) {
+        this.changedCarList = changedCarList;
     }
 }
