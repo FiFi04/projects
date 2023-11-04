@@ -10,13 +10,11 @@ public class FileWriteThread extends Thread {
     private final String TABLE_HEADERS = "MARKA;MODEL;ROK;BADANIE;OC;NR_REJ";
     private boolean changedCarList = false;
     private List<Car> cars;
-    private List<Car> lastSavedCars;
     private List<Car> addedCars = new ArrayList<>();
     private List<Car> deletedCars = new ArrayList<>();
 
     public FileWriteThread() {
         this.cars = CarRepository.getCars();
-        this.lastSavedCars = new ArrayList<>(CarRepository.getCars());
     }
 
     @Override
@@ -36,7 +34,6 @@ public class FileWriteThread extends Thread {
                             writer.write(car.getFileDescriptionFormat());
                             writer.newLine();
                         }
-                        lastSavedCars = List.copyOf(cars);
                         System.out.println("Pomyślnie zaktualizowano listę aut w pliku. Wątek: " + this.getId());
                         System.out.println("Dodane auta:" + addedCars);
                         System.out.println("Usunięte auta:" + deletedCars);
